@@ -1,0 +1,20 @@
+CREATE TABLE users (
+    id                    BIGINT AUTO_INCREMENT PRIMARY KEY,
+    first_name            VARCHAR(100)  NOT NULL,
+    last_name             VARCHAR(100)  NOT NULL,
+    email                 VARCHAR(150)  NOT NULL UNIQUE,
+    password              VARCHAR(255)  NOT NULL,
+    company               VARCHAR(150),
+    phone                 VARCHAR(20),
+    account_type          VARCHAR(30)   NOT NULL,
+    status                VARCHAR(30)   NOT NULL DEFAULT 'PENDING_APPROVAL',
+    mfa_enabled           BOOLEAN       NOT NULL DEFAULT FALSE,
+    mfa_secret            VARCHAR(100),
+    last_login_at         DATETIME,
+    failed_login_attempts INT           DEFAULT 0,
+    locked_until          DATETIME,
+    created_at            DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at            DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_user_email  (email),
+    INDEX idx_user_status (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

@@ -1,0 +1,58 @@
+version: '3.9'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: skyfreight-db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: skyfreight_portal
+      MYSQL_USER: skyfreight
+      MYSQL_PASSWORD: skyfreight123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "skyfreight", "-pskyfreight123"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    container_name: skyfreight-backend
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      DB_URL: jdbc:mysql://mysql:3306/skyfreight_portal?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      DB_USERNAME: skyfreight
+      DB_PASSWORD: skyfreight123
+      JWT_SECRET: c2t5ZnJlaWdodC1wb3J0YWwtc3VwZXItc2VjcmV0LWtleS1mb3ItaW50ZXJ2aWV3LWRlbW8tMjAyNg==
+      APP_BASE_URL: http://localhost:5173
+      MAIL_HOST: mailhog
+      MAIL_PORT: 1025
+      MAIL_USERNAME: noreply@skyfreight.com
+      MAIL_PASSWORD: ""
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    container_name: skyfreight-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: skyfreight-mail
+    ports:
+      - "1025:1025"   # SMTP
+      - "8025:8025"   # Web UI — view sent emails at http://localhost:8025
+
+volumes:
+  mysql_data:
