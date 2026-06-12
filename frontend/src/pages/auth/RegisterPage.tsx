@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { CheckCircle } from 'lucide-react'
 
@@ -30,7 +30,6 @@ const inputCls = `w-full px-3 py-2.5 rounded-lg border border-gray-300 text-sm
 
 export default function RegisterPage() {
   const { register: registerUser, loading, error } = useAuth()
-  const navigate = useNavigate()
   const [submitted, setSubmitted] = useState(false)
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({

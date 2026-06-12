@@ -1,4 +1,4 @@
-import { LogOut, User, Bell } from 'lucide-react'
+import { LogOut, Bell } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useState } from 'react'
 

@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, Users, ClipboardCheck, Settings } from 'lucide-react'
+import { LayoutDashboard, Users, ClipboardCheck } from 'lucide-react'
 import { usePermissions } from '@/hooks/usePermissions'
 import clsx from 'clsx'
 

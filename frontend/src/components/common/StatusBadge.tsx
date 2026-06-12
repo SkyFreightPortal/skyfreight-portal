@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import type { UserStatus, ApprovalStatus } from '@/types/auth.types'
+import type { UserStatus } from '@/types/auth.types'
 
 type Status = UserStatus | 'PENDING' | 'APPROVED' | 'REJECTED'
 
