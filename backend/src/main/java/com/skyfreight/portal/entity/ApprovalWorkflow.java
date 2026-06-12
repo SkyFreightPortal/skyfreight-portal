@@ -26,7 +26,7 @@ public class ApprovalWorkflow {
     private User user;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false, columnDefinition = "VARCHAR(30)")
     @Builder.Default
     private ApprovalStatus status = ApprovalStatus.PENDING;
 
