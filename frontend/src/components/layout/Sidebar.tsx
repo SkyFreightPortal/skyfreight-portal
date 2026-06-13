@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, Users, ClipboardCheck } from 'lucide-react'
+import { LayoutDashboard, Users, ClipboardCheck, Package } from 'lucide-react'
 import { usePermissions } from '@/hooks/usePermissions'
 import clsx from 'clsx'
 
@@ -7,6 +7,7 @@ const navItems = [
   { to: '/dashboard',      label: 'Dashboard',       icon: LayoutDashboard, roles: null },
   { to: '/users',          label: 'Users',            icon: Users,           roles: ['AIRLINE_ADMINISTRATOR', 'CUSTOMER_ADMIN', 'SALES_AGENT'] },
   { to: '/approvals',      label: 'Approvals',        icon: ClipboardCheck,  roles: ['AIRLINE_ADMINISTRATOR', 'SALES_AGENT'] },
+  { to: '/offers',         label: 'Offers',           icon: Package,         roles: ['AIRLINE_ADMINISTRATOR', 'CUSTOMER_ADMIN', 'SALES_AGENT', 'REVENUE_MANAGEMENT_USER', 'OPERATIONS_USER'] },
 ]
 
 export function Sidebar() {

@@ -11,6 +11,8 @@ export function usePermissions() {
   const isAdmin = () => hasRole('AIRLINE_ADMINISTRATOR')
   const canApprove = () => hasRole('AIRLINE_ADMINISTRATOR', 'SALES_AGENT')
   const canManageUsers = () => hasRole('AIRLINE_ADMINISTRATOR', 'CUSTOMER_ADMIN')
+  const canCreateOffers = () => hasRole('AIRLINE_ADMINISTRATOR', 'SALES_AGENT', 'CUSTOMER_ADMIN')
+  const canManageOffers = () => hasRole('AIRLINE_ADMINISTRATOR', 'SALES_AGENT', 'CUSTOMER_ADMIN')
 
-  return { hasRole, isAdmin, canApprove, canManageUsers }
+  return { hasRole, isAdmin, canApprove, canManageUsers, canCreateOffers, canManageOffers }
 }
