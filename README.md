@@ -57,6 +57,39 @@ A full-stack, production-grade web portal for managing airline cargo operations 
 
 ---
 
+## Step 2 — Offer Management
+
+### Features implemented
+| Feature | Status |
+|---|---|
+| Dynamic rate calculation (chargeable weight = max of actual vs volumetric) | ✅ |
+| Base charge, fuel surcharge, security/screening/terminal/customs fees | ✅ |
+| 8 cargo service types (Express, General Cargo, Pharma, Perishable, Valuable, Live Animals, Dangerous Goods, Priority) | ✅ |
+| Ancillary services (door pickup, insurance, packaging, etc.) | ✅ |
+| Offer creation with capacity availability check | ✅ |
+| Offer revise — creates a new version and supersedes the original | ✅ |
+| Offer status workflow (Draft → Active → Accepted/Rejected/Withdrawn/Expired) | ✅ |
+| Scheduled offer expiry | ✅ |
+| Multi-offer side-by-side comparison | ✅ |
+| Offer list with filters (status, route, service type, search) and pagination | ✅ |
+
+---
+
+## Step 3 — Shopping & Search
+
+### Features implemented
+| Feature | Status |
+|---|---|
+| Route search by origin, destination, date, service type — direct and connecting itineraries | ✅ |
+| Availability search — flight schedule, space (kg) and ULD position availability | ✅ |
+| Connection finder via hub airports with minimum layover enforcement | ✅ |
+| Calendar pricing — 7-day (configurable) view with cheapest-day highlight | ✅ |
+| Alternative/nearby airport pricing (e.g. JFK ↔ EWR, LHR ↔ LGW) | ✅ |
+| Recommendation engine — faster routes, lower-cost routes, alternative products, nearby airports | ✅ |
+| Deterministic date-varying availability/pricing (no booking ledger required) | ✅ |
+
+---
+
 ## Quick Start (Local with Docker)
 
 ### Prerequisites
@@ -129,6 +162,18 @@ DELETE /api/v1/users/{id}/roles/{roleId} Revoke role
 GET   /api/v1/approvals            List approval requests
 POST  /api/v1/approvals/{id}/decide   Approve or reject
 GET   /api/v1/approvals/pending/count  Count pending approvals
+
+POST  /api/v1/offers               Create a cargo offer with calculated pricing
+GET   /api/v1/offers               List offers (filterable, paginated)
+GET   /api/v1/offers/{id}          Get offer details
+POST  /api/v1/offers/{id}/revise   Re-price an offer as a new version
+PATCH /api/v1/offers/{id}/status   Accept, reject or withdraw an offer
+POST  /api/v1/offers/compare       Compare multiple offers side-by-side
+
+GET   /api/v1/search/routes          Search direct & connecting route options
+GET   /api/v1/search/availability    Flight, space and ULD availability
+GET   /api/v1/search/calendar        Calendar pricing & alternative airports
+GET   /api/v1/search/recommendations Faster/cheaper routes, alternative products, nearby airports
 ```
 
 ---
