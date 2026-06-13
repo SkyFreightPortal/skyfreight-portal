@@ -26,6 +26,20 @@
       vertical-align: middle; margin-left: 0.5em;
     }
     .reveal section.summary li { margin-bottom: 0.4em; }
+    .reveal section { position: relative; }
+    .reveal .category-badge {
+      position: absolute; bottom: 0.3em; left: 0;
+      background: var(--brand); color: white; border-radius: 6px;
+      padding: 0.25em 0.9em; font-size: 0.38em; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .reveal .tooling {
+      display: block; margin-top: 0.5em; font-size: 0.5em; color: #6b7280; font-style: italic;
+    }
+    .reveal table { font-size: 0.4em; margin-top: 0.6em; width: 100%; border-collapse: collapse; }
+    .reveal table th, .reveal table td { border: 1px solid #d1d5db; padding: 0.5em 0.7em; text-align: left; }
+    .reveal table th { background: var(--brand); color: white; }
+    .reveal table tr:nth-child(even) td { background: #f9fafb; }
   </style>
 </head>
 <body>
@@ -49,24 +63,29 @@
       </section>
 
       <section>
+        <span class="category-badge">Documentation &amp; Onboarding</span>
         <h2>1. Codebase &amp; Git History Analysis</h2>
         <ul>
           <li>Reconstructed the entire project history and architecture from commit messages and README — no manual digging</li>
           <li>Produced a step-by-step "how was this built" walkthrough on demand</li>
         </ul>
         <div class="file-ref">README.md · git log (6e68235, 081d537, 4a1e6af)</div>
+        <span class="tooling">Tooling: Git, Bash</span>
       </section>
 
       <section>
+        <span class="category-badge">Documentation</span>
         <h2>2. Code-Grounded Documentation</h2>
         <ul>
           <li>Read the actual <code>AuthController</code> / <code>AuthService</code> / <code>MfaService</code> code</li>
           <li>Generated a <strong>Mermaid sequence diagram</strong> for the Login + MFA flow that matches the real implementation — not a guess</li>
         </ul>
         <div class="file-ref">docs/sequence-diagrams.md</div>
+        <span class="tooling">Tooling: Mermaid, Markdown, Java/Spring Boot</span>
       </section>
 
       <section>
+        <span class="category-badge">Requirements &amp; Collaboration</span>
         <h2>3. Clarifying Questions Before Big Changes</h2>
         <ul>
           <li>"Make it look fancy" is ambiguous — Claude asked structured questions first:
@@ -74,9 +93,11 @@
           </li>
           <li>Avoided wasted rework by aligning on scope <em>before</em> writing code</li>
         </ul>
+        <span class="tooling">Tooling: Claude Code structured Q&amp;A (AskUserQuestion)</span>
       </section>
 
       <section>
+        <span class="category-badge">UI/UX &amp; Frontend Engineering</span>
         <h2>4. Multi-File Feature Implementation</h2>
         <ul>
           <li>Designed a cohesive visual system: gradient <strong>Logo</strong> badge, <strong>Footer</strong>, shared <strong>AuthLayout</strong></li>
@@ -86,26 +107,32 @@
           Logo.tsx · Footer.tsx · AuthLayout.tsx · Navbar.tsx · Sidebar.tsx<br>
           AppShell.tsx · LoginPage.tsx · RegisterPage.tsx · MfaPage.tsx · tailwind.config.ts
         </div>
+        <span class="tooling">Tooling: React, TypeScript, Tailwind CSS, lucide-react</span>
       </section>
 
       <section>
+        <span class="category-badge">Quality Assurance</span>
         <h2>5. Static Verification <span class="badge">tsc</span></h2>
         <ul>
           <li>Ran <code>npx tsc --noEmit</code> after every structural change</li>
           <li>Caught type errors from the refactor before they ever reached the browser</li>
         </ul>
+        <span class="tooling">Tooling: TypeScript Compiler</span>
       </section>
 
       <section>
+        <span class="category-badge">QA &amp; Testing</span>
         <h2>6. Live App Verification <span class="badge">/run skill</span></h2>
         <ul>
           <li>Launched the real Vite dev server</li>
           <li>Drove headless Chromium via Playwright to render Login, Register, MFA, and Dashboard</li>
           <li>Took actual screenshots and inspected them — proof the UI works, not just that it compiles</li>
         </ul>
+        <span class="tooling">Tooling: Vite, Playwright, Headless Chromium</span>
       </section>
 
       <section>
+        <span class="category-badge">Debugging</span>
         <h2>7. Root-Cause Debugging via Live Testing</h2>
         <ul>
           <li>First screenshot came back <strong>completely unstyled</strong></li>
@@ -113,9 +140,11 @@
           <li>A defect invisible to code review, only found by actually running the app</li>
         </ul>
         <div class="file-ref">frontend/postcss.config.js (new)</div>
+        <span class="tooling">Tooling: PostCSS, Tailwind CSS, Vite</span>
       </section>
 
       <section>
+        <span class="category-badge">DevOps &amp; Integration Testing</span>
         <h2>8. End-to-End Full-Stack Verification</h2>
         <ul>
           <li>Brought up MySQL + MailHog + Spring Boot backend via <strong>Docker Compose</strong></li>
@@ -123,9 +152,11 @@
           <li>Confirmed the new header, footer, and dashboard render correctly post-auth, with zero console errors</li>
         </ul>
         <div class="file-ref">docker-compose.yml</div>
+        <span class="tooling">Tooling: Docker Compose, MySQL, Spring Boot, MailHog</span>
       </section>
 
       <section>
+        <span class="category-badge">Version Control</span>
         <h2>9. Git Workflow Automation</h2>
         <ul>
           <li>Staged only the relevant files (left scratch files out)</li>
@@ -133,15 +164,39 @@
           <li>Pushed straight to GitHub on request</li>
         </ul>
         <div class="file-ref">commit ed59445 → master</div>
+        <span class="tooling">Tooling: Git, GitHub</span>
       </section>
 
       <section>
+        <span class="category-badge">Tooling Configuration</span>
         <h2>10. Permission &amp; Settings Awareness</h2>
         <ul>
           <li>Reviewed the accumulated <code>.claude/settings.local.json</code> permission allowlist</li>
           <li>Identified one-off, session-specific entries vs. durable, reusable patterns worth keeping</li>
         </ul>
         <div class="file-ref">.claude/settings.local.json</div>
+        <span class="tooling">Tooling: Claude Code settings (JSON)</span>
+      </section>
+
+      <section>
+        <h2>Feature Matrix</h2>
+        <table>
+          <thead>
+            <tr><th>#</th><th>Feature</th><th>Skill Category</th><th>Tooling</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>Codebase &amp; Git History Analysis</td><td>Documentation &amp; Onboarding</td><td>Git, Bash</td></tr>
+            <tr><td>2</td><td>Code-Grounded Documentation</td><td>Documentation</td><td>Mermaid, Markdown</td></tr>
+            <tr><td>3</td><td>Clarifying Questions Before Big Changes</td><td>Requirements &amp; Collaboration</td><td>Structured Q&amp;A</td></tr>
+            <tr><td>4</td><td>Multi-File Feature Implementation</td><td>UI/UX &amp; Frontend Engineering</td><td>React, TypeScript, Tailwind CSS</td></tr>
+            <tr><td>5</td><td>Static Verification</td><td>Quality Assurance</td><td>TypeScript Compiler (tsc)</td></tr>
+            <tr><td>6</td><td>Live App Verification</td><td>QA &amp; Testing</td><td>Vite, Playwright, Chromium</td></tr>
+            <tr><td>7</td><td>Root-Cause Debugging via Live Testing</td><td>Debugging</td><td>PostCSS, Tailwind, Vite</td></tr>
+            <tr><td>8</td><td>End-to-End Full-Stack Verification</td><td>DevOps &amp; Integration Testing</td><td>Docker Compose, MySQL, Spring Boot</td></tr>
+            <tr><td>9</td><td>Git Workflow Automation</td><td>Version Control</td><td>Git, GitHub</td></tr>
+            <tr><td>10</td><td>Permission &amp; Settings Awareness</td><td>Tooling Configuration</td><td>Claude Code settings (JSON)</td></tr>
+          </tbody>
+        </table>
       </section>
 
       <section class="summary">
