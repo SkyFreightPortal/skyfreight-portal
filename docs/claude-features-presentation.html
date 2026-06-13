@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Code in Action — SkyFreight Portal</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/monokai.css">
+  <style>
+    :root { --accent: #d97706; --brand: #1a3c6e; }
+    .reveal { font-family: 'Segoe UI', system-ui, sans-serif; }
+    .reveal h1, .reveal h2, .reveal h3 { color: var(--brand); font-weight: 700; }
+    .reveal h1 .accent, .reveal h2 .accent { color: var(--accent); }
+    .reveal section.title-slide h1 { font-size: 2.4em; }
+    .reveal .subtitle { color: #555; font-size: 0.7em; }
+    .reveal .file-ref {
+      display: inline-block; margin-top: 0.6em; padding: 0.25em 0.6em;
+      background: #f3f4f6; border-left: 4px solid var(--accent);
+      font-family: monospace; font-size: 0.55em; text-align: left; border-radius: 4px;
+    }
+    .reveal ul { font-size: 0.85em; }
+    .reveal .badge {
+      display: inline-block; background: var(--accent); color: white;
+      border-radius: 999px; padding: 0.1em 0.7em; font-size: 0.5em; font-weight: 700;
+      vertical-align: middle; margin-left: 0.5em;
+    }
+    .reveal section.summary li { margin-bottom: 0.4em; }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <section class="title-slide">
+        <h1>Claude Code in Action<br><span class="accent">SkyFreight Portal</span></h1>
+        <p class="subtitle">A walkthrough of AI-assisted, full-stack development —<br>
+        from codebase analysis to a verified, deployed feature</p>
+      </section>
+
+      <section>
+        <h2>What Got Built</h2>
+        <ul>
+          <li>Full-stack airline cargo portal: <strong>React + TypeScript + Spring Boot + MySQL</strong></li>
+          <li>Step 1: Registration, JWT + MFA login, RBAC, approvals, audit logging</li>
+          <li>This session: a complete <strong>visual redesign</strong> — branded logo, header, footer, auth pages</li>
+          <li>Plus documentation, bug fixes, and a Git workflow — all driven conversationally</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>1. Codebase &amp; Git History Analysis</h2>
+        <ul>
+          <li>Reconstructed the entire project history and architecture from commit messages and README — no manual digging</li>
+          <li>Produced a step-by-step "how was this built" walkthrough on demand</li>
+        </ul>
+        <div class="file-ref">README.md · git log (6e68235, 081d537, 4a1e6af)</div>
+      </section>
+
+      <section>
+        <h2>2. Code-Grounded Documentation</h2>
+        <ul>
+          <li>Read the actual <code>AuthController</code> / <code>AuthService</code> / <code>MfaService</code> code</li>
+          <li>Generated a <strong>Mermaid sequence diagram</strong> for the Login + MFA flow that matches the real implementation — not a guess</li>
+        </ul>
+        <div class="file-ref">docs/sequence-diagrams.md</div>
+      </section>
+
+      <section>
+        <h2>3. Clarifying Questions Before Big Changes</h2>
+        <ul>
+          <li>"Make it look fancy" is ambiguous — Claude asked structured questions first:
+            <ul><li>Which flow to diagram?</li><li>Where should docs live?</li></ul>
+          </li>
+          <li>Avoided wasted rework by aligning on scope <em>before</em> writing code</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>4. Multi-File Feature Implementation</h2>
+        <ul>
+          <li>Designed a cohesive visual system: gradient <strong>Logo</strong> badge, <strong>Footer</strong>, shared <strong>AuthLayout</strong></li>
+          <li>Applied consistently across 9 files in a single coordinated pass — no leftover inconsistencies</li>
+        </ul>
+        <div class="file-ref">
+          Logo.tsx · Footer.tsx · AuthLayout.tsx · Navbar.tsx · Sidebar.tsx<br>
+          AppShell.tsx · LoginPage.tsx · RegisterPage.tsx · MfaPage.tsx · tailwind.config.ts
+        </div>
+      </section>
+
+      <section>
+        <h2>5. Static Verification <span class="badge">tsc</span></h2>
+        <ul>
+          <li>Ran <code>npx tsc --noEmit</code> after every structural change</li>
+          <li>Caught type errors from the refactor before they ever reached the browser</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>6. Live App Verification <span class="badge">/run skill</span></h2>
+        <ul>
+          <li>Launched the real Vite dev server</li>
+          <li>Drove headless Chromium via Playwright to render Login, Register, MFA, and Dashboard</li>
+          <li>Took actual screenshots and inspected them — proof the UI works, not just that it compiles</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>7. Root-Cause Debugging via Live Testing</h2>
+        <ul>
+          <li>First screenshot came back <strong>completely unstyled</strong></li>
+          <li>Diagnosis: <code>postcss.config.js</code> was missing entirely — Tailwind had <em>never</em> been running, in the whole app's history</li>
+          <li>A defect invisible to code review, only found by actually running the app</li>
+        </ul>
+        <div class="file-ref">frontend/postcss.config.js (new)</div>
+      </section>
+
+      <section>
+        <h2>8. End-to-End Full-Stack Verification</h2>
+        <ul>
+          <li>Brought up MySQL + MailHog + Spring Boot backend via <strong>Docker Compose</strong></li>
+          <li>Logged in as a real user (<code>admin@skyfreight.com</code>) through the redesigned UI</li>
+          <li>Confirmed the new header, footer, and dashboard render correctly post-auth, with zero console errors</li>
+        </ul>
+        <div class="file-ref">docker-compose.yml</div>
+      </section>
+
+      <section>
+        <h2>9. Git Workflow Automation</h2>
+        <ul>
+          <li>Staged only the relevant files (left scratch files out)</li>
+          <li>Wrote a commit message explaining the <em>why</em> — including the hidden PostCSS bug fix</li>
+          <li>Pushed straight to GitHub on request</li>
+        </ul>
+        <div class="file-ref">commit ed59445 → master</div>
+      </section>
+
+      <section>
+        <h2>10. Permission &amp; Settings Awareness</h2>
+        <ul>
+          <li>Reviewed the accumulated <code>.claude/settings.local.json</code> permission allowlist</li>
+          <li>Identified one-off, session-specific entries vs. durable, reusable patterns worth keeping</li>
+        </ul>
+        <div class="file-ref">.claude/settings.local.json</div>
+      </section>
+
+      <section class="summary">
+        <h2>Takeaways</h2>
+        <ul>
+          <li><strong>Context-aware:</strong> reads real code before writing docs or diagrams</li>
+          <li><strong>Collaborative:</strong> asks before guessing on ambiguous design asks</li>
+          <li><strong>Verifies, doesn't assume:</strong> type-checks, runs the app, screenshots the result</li>
+          <li><strong>Finds real bugs:</strong> caught a project-wide styling defect via live testing</li>
+          <li><strong>Ships safely:</strong> clean, well-described commits — pushed only on request</li>
+        </ul>
+      </section>
+
+      <section class="title-slide">
+        <h1>Questions?</h1>
+        <p class="subtitle">github.com/SkyFreightPortal/skyfreight-portal</p>
+      </section>
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      slideNumber: true,
+      transition: 'slide',
+      plugins: [ RevealHighlight ]
+    });
+  </script>
+</body>
+</html>
