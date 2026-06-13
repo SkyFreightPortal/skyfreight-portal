@@ -22,10 +22,10 @@ export function Sidebar() {
               key={to}
               to={to}
               className={({ isActive }) =>
-                clsx('flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
+                clsx('flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors border-l-[3px]',
                   isActive
-                    ? 'bg-brand-50 text-brand-700 font-semibold'
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900')
+                    ? 'bg-brand-50 text-brand-700 font-semibold border-accent-500'
+                    : 'text-gray-600 border-transparent hover:bg-gray-50 hover:text-gray-900')
               }
             >
               <Icon size={18} />

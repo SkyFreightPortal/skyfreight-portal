@@ -1,6 +1,7 @@
 import { LogOut, Bell } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useState } from 'react'
+import { Logo } from '@/components/common/Logo'
 
 export function Navbar() {
   const { user, logout } = useAuth()
@@ -11,16 +12,10 @@ export function Navbar() {
     : 'U'
 
   return (
-    <header className="bg-brand-900 text-white shadow-lg z-20 flex-shrink-0">
+    <header className="bg-gradient-to-r from-brand-900 to-brand-800 text-white shadow-lg z-20
+                       flex-shrink-0 border-b border-accent-500/30">
       <div className="flex items-center justify-between h-16 px-6">
-        {/* Logo */}
-        <div className="flex items-center gap-3">
-          <span className="text-2xl">✈</span>
-          <div>
-            <span className="text-lg font-bold tracking-tight">SkyFreight</span>
-            <span className="text-brand-100 text-sm ml-2 hidden sm:inline">Portal</span>
-          </div>
-        </div>
+        <Logo size="md" variant="light" />
 
         {/* Right actions */}
         <div className="flex items-center gap-4">

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { ShieldCheck } from 'lucide-react'
 import { useForm } from 'react-hook-form'
+import { AuthLayout } from '@/components/layout/AuthLayout'
 
 export default function MfaPage() {
   const { mfaRequired, mfaUserId, verifyMfa, loading, error, isAuthenticated, clearError } = useAuth()
@@ -21,8 +22,7 @@ export default function MfaPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-brand-900 via-brand-800 to-brand-600
-                    flex items-center justify-center p-4">
+    <AuthLayout subtitle="Airline Cargo Management Platform">
       <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-sm text-center">
         <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl
                         bg-brand-50 mb-4 mx-auto">
@@ -60,6 +60,6 @@ export default function MfaPage() {
           </button>
         </form>
       </div>
-    </div>
+    </AuthLayout>
   )
 }
