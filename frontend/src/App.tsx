@@ -14,6 +14,7 @@ const OfferListPage    = lazy(() => import('@/pages/offers/OfferListPage'))
 const OfferCreatePage  = lazy(() => import('@/pages/offers/OfferCreatePage'))
 const OfferDetailPage  = lazy(() => import('@/pages/offers/OfferDetailPage'))
 const OfferComparePage = lazy(() => import('@/pages/offers/OfferComparePage'))
+const ShoppingSearchPage = lazy(() => import('@/pages/search/ShoppingSearchPage'))
 
 const OFFER_READ_ROLES: import('@/types/auth.types').RoleName[] =
   ['AIRLINE_ADMINISTRATOR', 'SALES_AGENT', 'CUSTOMER_ADMIN', 'REVENUE_MANAGEMENT_USER', 'OPERATIONS_USER']
@@ -61,6 +62,11 @@ export default function App() {
             <Route path="/offers/:id" element={
               <ProtectedRoute roles={OFFER_READ_ROLES}>
                 <OfferDetailPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/search" element={
+              <ProtectedRoute roles={OFFER_READ_ROLES}>
+                <ShoppingSearchPage />
               </ProtectedRoute>
             } />
           </Route>

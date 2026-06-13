@@ -56,6 +56,9 @@ public class SecurityConfig {
                         .requestMatchers("/offers/**").hasAnyRole(
                                 "AIRLINE_ADMINISTRATOR", "SALES_AGENT", "CUSTOMER_ADMIN",
                                 "REVENUE_MANAGEMENT_USER", "OPERATIONS_USER")
+                        .requestMatchers("/search/**").hasAnyRole(
+                                "AIRLINE_ADMINISTRATOR", "SALES_AGENT", "CUSTOMER_ADMIN",
+                                "REVENUE_MANAGEMENT_USER", "OPERATIONS_USER")
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())

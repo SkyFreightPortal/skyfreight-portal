@@ -60,17 +60,11 @@ public class RateCalculationService {
                 ? request.getWeightKg().max(volumetricWeight)
                 : request.getWeightKg();
 
-        RateMatch rateMatch = resolveRateCard(
+        LanePrice lanePrice = quote(
                 request.getOriginAirport(), request.getDestinationAirport(),
-                request.getServiceType(), request.getRateType());
-        RateCard rateCard = rateMatch.rateCard();
-
-        BigDecimal baseCharge = chargeableWeight.multiply(rateCard.getRatePerKg())
-                .max(rateCard.getMinimumCharge())
-                .setScale(2, RoundingMode.HALF_UP);
-
-        BigDecimal fuelSurcharge = baseCharge.multiply(rateCard.getFuelSurchargePct())
-                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+                request.getServiceType(), request.getRateType(),
+                chargeableWeight, request.getRequestedCapacityKg());
+        RateCard rateCard = lanePrice.rateCard();
 
         List<OfferAncillaryService> ancillaryLines = buildAncillaryLines(
                 request.getAncillaryServices(), request.getDeclaredValue());
@@ -78,27 +72,20 @@ public class RateCalculationService {
                 .map(OfferAncillaryService::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        BigDecimal totalPrice = baseCharge
-                .add(fuelSurcharge)
-                .add(rateCard.getSecuritySurcharge())
-                .add(rateCard.getScreeningFee())
-                .add(rateCard.getTerminalHandlingFee())
-                .add(rateCard.getCustomsFee())
+        BigDecimal totalPrice = lanePrice.totalPrice()
                 .add(ancillaryTotal)
                 .setScale(2, RoundingMode.HALF_UP);
 
         int estimatedTransitHours = estimateTransitHours(request.getServiceType(), request.getTransitPreference());
-        boolean capacityAvailable = request.getRequestedCapacityKg()
-                .compareTo(rateCard.getAvailableCapacityKg()) <= 0;
 
         return new PricingResult(
                 volumetricWeight,
                 chargeableWeight,
                 rateCard,
-                rateMatch.rateTypeUsed(),
-                rateCard.getCurrency(),
-                baseCharge,
-                fuelSurcharge,
+                lanePrice.rateTypeUsed(),
+                lanePrice.currency(),
+                lanePrice.baseCharge(),
+                lanePrice.fuelSurcharge(),
                 rateCard.getSecuritySurcharge(),
                 rateCard.getScreeningFee(),
                 rateCard.getTerminalHandlingFee(),
@@ -107,6 +94,45 @@ public class RateCalculationService {
                 ancillaryTotal,
                 totalPrice,
                 estimatedTransitHours,
+                lanePrice.capacityAvailable()
+        );
+    }
+
+    /**
+     * Prices a lane/service/rate combination without persisting anything or pricing
+     * ancillary services — used by offer creation (via {@link #calculate}) and by the
+     * shopping/search quoting endpoints.
+     */
+    public LanePrice quote(String origin, String destination, Offer.ServiceType serviceType,
+                            Offer.RateType rateType, BigDecimal chargeableWeightKg, BigDecimal requestedCapacityKg) {
+        RateMatch rateMatch = resolveRateCard(origin, destination, serviceType, rateType);
+        RateCard rateCard = rateMatch.rateCard();
+
+        BigDecimal baseCharge = chargeableWeightKg.multiply(rateCard.getRatePerKg())
+                .max(rateCard.getMinimumCharge())
+                .setScale(2, RoundingMode.HALF_UP);
+
+        BigDecimal fuelSurcharge = baseCharge.multiply(rateCard.getFuelSurchargePct())
+                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+
+        BigDecimal feesTotal = rateCard.getSecuritySurcharge()
+                .add(rateCard.getScreeningFee())
+                .add(rateCard.getTerminalHandlingFee())
+                .add(rateCard.getCustomsFee());
+
+        BigDecimal totalPrice = baseCharge.add(fuelSurcharge).add(feesTotal)
+                .setScale(2, RoundingMode.HALF_UP);
+
+        boolean capacityAvailable = requestedCapacityKg.compareTo(rateCard.getAvailableCapacityKg()) <= 0;
+
+        return new LanePrice(
+                rateCard,
+                rateMatch.rateTypeUsed(),
+                rateCard.getCurrency(),
+                baseCharge,
+                fuelSurcharge,
+                feesTotal,
+                totalPrice,
                 capacityAvailable
         );
     }
@@ -165,7 +191,7 @@ public class RateCalculationService {
                 .setScale(2, RoundingMode.HALF_UP);
     }
 
-    private int estimateTransitHours(Offer.ServiceType serviceType, Offer.TransitPreference preference) {
+    public int estimateTransitHours(Offer.ServiceType serviceType, Offer.TransitPreference preference) {
         int base = BASE_TRANSIT_HOURS.get(serviceType);
         double multiplier = switch (preference) {
             case EXPRESS -> 0.7;
@@ -173,6 +199,10 @@ public class RateCalculationService {
             case STANDARD -> 1.0;
         };
         return (int) Math.round(base * multiplier);
+    }
+
+    public int getBaseTransitHours(Offer.ServiceType serviceType) {
+        return BASE_TRANSIT_HOURS.get(serviceType);
     }
 
     private record RateMatch(RateCard rateCard, Offer.RateType rateTypeUsed) {}
@@ -193,6 +223,17 @@ public class RateCalculationService {
             BigDecimal ancillaryTotal,
             BigDecimal totalPrice,
             int estimatedTransitHours,
+            boolean capacityAvailable
+    ) {}
+
+    public record LanePrice(
+            RateCard rateCard,
+            Offer.RateType rateTypeUsed,
+            String currency,
+            BigDecimal baseCharge,
+            BigDecimal fuelSurcharge,
+            BigDecimal feesTotal,
+            BigDecimal totalPrice,
             boolean capacityAvailable
     ) {}
 }
