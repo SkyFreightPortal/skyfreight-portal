@@ -93,7 +93,7 @@ export default function OfferListPage() {
                 <thead className="bg-gray-50 border-b border-gray-200">
                   <tr>
                     <th className="px-4 py-3 w-10"></th>
-                    {['Offer #', 'Route', 'Service Type', 'Customer', 'Total Price', 'Status', 'Valid Until'].map(h => (
+                    {['Offer #', 'Origin', 'Destination', 'Service Type', 'Customer', 'Total Price', 'Status', 'Valid Until'].map(h => (
                       <th key={h} className="px-4 py-3 text-left font-semibold text-gray-600 text-xs uppercase tracking-wide">
                         {h}
                       </th>
@@ -102,7 +102,7 @@ export default function OfferListPage() {
                 </thead>
                 <tbody className="divide-y divide-gray-100">
                   {data?.content.length === 0 && (
-                    <tr><td colSpan={8} className="px-4 py-12 text-center text-gray-400">No offers found</td></tr>
+                    <tr><td colSpan={9} className="px-4 py-12 text-center text-gray-400">No offers found</td></tr>
                   )}
                   {data?.content.map(offer => (
                     <tr key={offer.id} className="hover:bg-gray-50 transition-colors">
@@ -117,7 +117,8 @@ export default function OfferListPage() {
                         </Link>
                         {offer.version > 1 && <span className="ml-1 text-xs text-gray-400">v{offer.version}</span>}
                       </td>
-                      <td className="px-4 py-3 text-gray-500">{offer.originAirport} → {offer.destinationAirport}</td>
+                      <td className="px-4 py-3 text-gray-500">{offer.originAirport}</td>
+                      <td className="px-4 py-3 text-gray-500">{offer.destinationAirport}</td>
                       <td className="px-4 py-3 text-gray-500">{SERVICE_TYPE_LABELS[offer.serviceType]}</td>
                       <td className="px-4 py-3 text-gray-500">{offer.customerCompany}</td>
                       <td className="px-4 py-3 font-medium text-gray-900">
