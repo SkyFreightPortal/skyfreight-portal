@@ -13,7 +13,7 @@ import { PageHeader } from '@/components/common/PageHeader'
 import { StatusBadge } from '@/components/common/StatusBadge'
 import { PageLoader } from '@/components/common/LoadingSpinner'
 import { usePermissions } from '@/hooks/usePermissions'
-import { CheckCircle, XCircle, Ban, History, ArrowLeft } from 'lucide-react'
+import { CheckCircle, XCircle, Ban, History, ArrowLeft, Truck } from 'lucide-react'
 import { format } from 'date-fns'
 
 const Row = ({ label, value }: { label: string; value: React.ReactNode }) => (
@@ -176,6 +176,28 @@ export default function OfferDetailPage() {
               </Link>
             )}
           </div>
+
+          {/* Order */}
+          {offer.status === 'ACCEPTED' && (
+            <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+              <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wide mb-3">Order</h2>
+              {offer.orderId ? (
+                <Link to={`/orders/${offer.orderId}`}
+                  className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium
+                             bg-brand-50 hover:bg-brand-100 text-brand-700 transition-colors">
+                  <Truck size={16} /> View Order
+                </Link>
+              ) : canManageOffers() ? (
+                <Link to={`/orders/new?offerId=${offer.id}`}
+                  className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium
+                             bg-brand-700 hover:bg-brand-800 text-white transition-colors">
+                  <Truck size={16} /> Create Order
+                </Link>
+              ) : (
+                <p className="text-sm text-gray-400">No order has been created for this offer yet.</p>
+              )}
+            </div>
+          )}
 
           {/* Actions */}
           {canManageOffers() && (transitions.length > 0 || canRevise) && (

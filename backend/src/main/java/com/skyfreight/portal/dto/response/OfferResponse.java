@@ -69,11 +69,16 @@ public class OfferResponse {
 
     private Integer version;
     private Long parentOfferId;
+    private Long orderId;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
     public static OfferResponse from(Offer offer) {
+        return from(offer, null);
+    }
+
+    public static OfferResponse from(Offer offer, Long orderId) {
         return OfferResponse.builder()
                 .id(offer.getId())
                 .offerNumber(offer.getOfferNumber())
@@ -120,6 +125,7 @@ public class OfferResponse {
                 .capacityHoldUntil(offer.getCapacityHoldUntil())
                 .version(offer.getVersion())
                 .parentOfferId(offer.getParentOffer() != null ? offer.getParentOffer().getId() : null)
+                .orderId(orderId)
                 .createdAt(offer.getCreatedAt())
                 .updatedAt(offer.getUpdatedAt())
                 .build();

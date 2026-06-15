@@ -15,6 +15,9 @@ const OfferCreatePage  = lazy(() => import('@/pages/offers/OfferCreatePage'))
 const OfferDetailPage  = lazy(() => import('@/pages/offers/OfferDetailPage'))
 const OfferComparePage = lazy(() => import('@/pages/offers/OfferComparePage'))
 const ShoppingSearchPage = lazy(() => import('@/pages/search/ShoppingSearchPage'))
+const OrderListPage   = lazy(() => import('@/pages/orders/OrderListPage'))
+const OrderCreatePage = lazy(() => import('@/pages/orders/OrderCreatePage'))
+const OrderDetailPage = lazy(() => import('@/pages/orders/OrderDetailPage'))
 
 const OFFER_READ_ROLES: import('@/types/auth.types').RoleName[] =
   ['AIRLINE_ADMINISTRATOR', 'SALES_AGENT', 'CUSTOMER_ADMIN', 'REVENUE_MANAGEMENT_USER', 'OPERATIONS_USER']
@@ -67,6 +70,21 @@ export default function App() {
             <Route path="/search" element={
               <ProtectedRoute roles={OFFER_READ_ROLES}>
                 <ShoppingSearchPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/orders" element={
+              <ProtectedRoute roles={OFFER_READ_ROLES}>
+                <OrderListPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/orders/new" element={
+              <ProtectedRoute roles={OFFER_MANAGE_ROLES}>
+                <OrderCreatePage />
+              </ProtectedRoute>
+            } />
+            <Route path="/orders/:id" element={
+              <ProtectedRoute roles={OFFER_READ_ROLES}>
+                <OrderDetailPage />
               </ProtectedRoute>
             } />
           </Route>

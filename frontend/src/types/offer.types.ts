@@ -85,6 +85,7 @@ export interface Offer {
   capacityHoldUntil: string
   version: number
   parentOfferId: number | null
+  orderId: number | null
   createdAt: string
   updatedAt: string
 }

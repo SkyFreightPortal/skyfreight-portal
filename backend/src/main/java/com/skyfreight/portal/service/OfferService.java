@@ -3,10 +3,12 @@ package com.skyfreight.portal.service;
 import com.skyfreight.portal.dto.request.OfferCreateRequest;
 import com.skyfreight.portal.dto.response.OfferResponse;
 import com.skyfreight.portal.entity.Offer;
+import com.skyfreight.portal.entity.Order;
 import com.skyfreight.portal.entity.User;
 import com.skyfreight.portal.exception.OfferNotFoundException;
 import com.skyfreight.portal.exception.UserNotFoundException;
 import com.skyfreight.portal.repository.OfferRepository;
+import com.skyfreight.portal.repository.OrderRepository;
 import com.skyfreight.portal.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +40,7 @@ public class OfferService {
     private final OfferRepository offerRepository;
     private final UserRepository userRepository;
     private final RateCalculationService rateCalculationService;
+    private final OrderRepository orderRepository;
 
     @Transactional
     public OfferResponse create(OfferCreateRequest request) {
@@ -71,21 +74,25 @@ public class OfferService {
     public Page<OfferResponse> findAll(Offer.OfferStatus status, String originAirport, String destinationAirport,
                                         Offer.ServiceType serviceType, String search, Pageable pageable) {
         return offerRepository.findAllWithFilters(status, originAirport, destinationAirport, serviceType, search, pageable)
-                .map(OfferResponse::from);
+                .map(offer -> OfferResponse.from(offer, orderIdFor(offer)));
     }
 
     @Transactional(readOnly = true)
     public OfferResponse findById(Long id) {
-        return offerRepository.findById(id)
-                .map(OfferResponse::from)
+        Offer offer = offerRepository.findById(id)
                 .orElseThrow(() -> new OfferNotFoundException(id));
+        return OfferResponse.from(offer, orderIdFor(offer));
     }
 
     @Transactional(readOnly = true)
     public List<OfferResponse> compare(List<Long> ids) {
         return offerRepository.findByIdIn(ids).stream()
-                .map(OfferResponse::from)
+                .map(offer -> OfferResponse.from(offer, orderIdFor(offer)))
                 .collect(Collectors.toList());
+    }
+
+    private Long orderIdFor(Offer offer) {
+        return orderRepository.findByOfferId(offer.getId()).map(Order::getId).orElse(null);
     }
 
     @Transactional
