@@ -7,6 +7,7 @@ import { PageLoader } from '@/components/common/LoadingSpinner'
 const LoginPage      = lazy(() => import('@/pages/auth/LoginPage'))
 const RegisterPage   = lazy(() => import('@/pages/auth/RegisterPage'))
 const MfaPage        = lazy(() => import('@/pages/auth/MfaPage'))
+const ProfilePage    = lazy(() => import('@/pages/profile/ProfilePage'))
 const DashboardPage  = lazy(() => import('@/pages/dashboard/DashboardPage'))
 const UserMgmtPage   = lazy(() => import('@/pages/users/UserManagementPage'))
 const ApprovalPage   = lazy(() => import('@/pages/users/ApprovalQueuePage'))
@@ -36,6 +37,7 @@ export default function App() {
 
           {/* Protected routes */}
           <Route element={<ProtectedRoute><AppShell /></ProtectedRoute>}>
+            <Route path="/profile" element={<ProfilePage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/users"     element={
               <ProtectedRoute roles={['AIRLINE_ADMINISTRATOR', 'CUSTOMER_ADMIN', 'SALES_AGENT']}>
