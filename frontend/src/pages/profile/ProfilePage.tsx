@@ -14,6 +14,10 @@ import type { User } from '@/types/auth.types'
 
 // Form validation schema
 const profileFormSchema = z.object({
+  email: z.string()
+    .min(1, 'Email address is required')
+    .email('Please enter a valid email address')
+    .max(150, 'Email must be at most 150 characters'),
   firstName: z.string()
     .min(1, 'First name is required')
     .max(100, 'First name must be at most 100 characters'),
@@ -62,6 +66,7 @@ export default function ProfilePage() {
         
         // Pre-populate form with current values
         reset({
+          email: userData.email,
           firstName: userData.firstName,
           lastName: userData.lastName,
           company: userData.company || '',
@@ -86,6 +91,7 @@ export default function ProfilePage() {
           const userData = response.data.data
           setProfileData(userData)
           reset({
+            email: userData.email,
             firstName: userData.firstName,
             lastName: userData.lastName,
             company: userData.company || '',
@@ -108,6 +114,7 @@ export default function ProfilePage() {
     
     try {
       const response = await userApi.update(user.id, {
+        email: data.email,
         firstName: data.firstName,
         lastName: data.lastName,
         company: data.company || '',
@@ -137,6 +144,7 @@ export default function ProfilePage() {
   const handleCancel = () => {
     if (profileData) {
       reset({
+        email: profileData.email,
         firstName: profileData.firstName,
         lastName: profileData.lastName,
         company: profileData.company || '',
@@ -239,16 +247,6 @@ export default function ProfilePage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="flex items-center gap-2 text-xs font-medium text-gray-500 mb-1">
-                  <Mail size={14} />
-                  Email Address
-                </label>
-                <p className="text-sm font-medium text-gray-900 bg-gray-50 px-3 py-2 rounded-lg border border-gray-200">
-                  {profileData.email}
-                </p>
-              </div>
-
-              <div>
-                <label className="flex items-center gap-2 text-xs font-medium text-gray-500 mb-1">
                   <Shield size={14} />
                   Account Type
                 </label>
@@ -312,6 +310,24 @@ export default function ProfilePage() {
             </h3>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              <div>
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1">
+                  <Mail size={14} />
+                  Email Address <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="email"
+                  {...register('email')}
+                  className="w-full px-3 py-2.5 rounded-lg border border-gray-300 text-sm
+                             focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent
+                             transition-colors"
+                  placeholder="you@example.com"
+                />
+                {errors.email && (
+                  <p className="mt-1 text-xs text-red-600">{errors.email.message}</p>
+                )}
+              </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
